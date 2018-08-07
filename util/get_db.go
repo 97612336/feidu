@@ -8,23 +8,13 @@ import (
 	"os/user"
 	"fmt"
 	"feidu/models"
+	"github.com/garyburd/redigo/redis"
 )
 
 var DB *sql.DB
 
-//获取db对象
-func Get_sql_db() *sql.DB {
-	sqlconf := Get_conf_info()
-	//打开数据库
-	db, err := sql.Open("mysql",
-		sqlconf.SqlUser+":"+sqlconf.SqlPassword+
-			"@tcp("+sqlconf.SqlHost+":"+sqlconf.SqlPort+")/cyx?charset=utf8")
-	if err != nil {
-		log.Println("打开数据库出错")
-	}
-	return db
-}
-
+//得到家目录的路径
+//得到家目录的路径
 //得到家目录的路径
 func Get_home_path() string {
 	current_user, err := user.Current()
@@ -34,6 +24,21 @@ func Get_home_path() string {
 	}
 	user_home := current_user.HomeDir
 	return user_home
+}
+
+//获取mysql对象
+//获取mysql对象
+//获取mysql对象
+func Get_sql_db() *sql.DB {
+	sqlconf := Get_conf_info()
+	//打开数据库
+	db, err := sql.Open("mysql",
+		sqlconf.SqlUser + ":" + sqlconf.SqlPassword+
+			"@tcp("+ sqlconf.SqlHost+ ":"+ sqlconf.SqlPort+ ")/cyx?charset=utf8")
+	if err != nil {
+		log.Println("打开数据库出错")
+	}
+	return db
 }
 
 //获取mysql配置文件信息
@@ -65,4 +70,37 @@ func Get_img_account() models.Upload_account {
 	var account_json = []byte(str_data)
 	json.Unmarshal(account_json, &account)
 	return account
+}
+
+//获取redis操作对象
+//获取redis操作对象
+//获取redis操作对象
+func Get_redis_obj() models.Redis_conf {
+	//获取reids相关的配置文件
+	home_path := Get_home_path()
+	config_file := home_path + "/conf/redis_conf"
+	data, _ := ioutil.ReadFile(config_file)
+	//将读取到的数据赋值给对象
+	var redis_conf models.Redis_conf
+	json.Unmarshal(data, &redis_conf)
+	//通过对象信息,链接到redis数据库
+	return redis_conf
+}
+
+//设置redis字符串的值
+func Set_redis(key string, value string, times ...string) {
+	//获取配置信息,连接到redis
+	redis_conf := Get_redis_obj()
+	//连接到redis数据库
+	red, err := redis.Dial("tcp", string(redis_conf.Ip_addr)+":"+string(redis_conf.Port))
+	CheckErr(err, "链接redis数据库出错:")
+	defer red.Close()
+	//判断是否有时间参数,如果有的话就设置过期时间,没有的话就不设置
+	if len(times) < 1 {
+		_, err := red.Do("set", key, value)
+		CheckErr(err)
+	} else {
+		_, err := red.Do("set", key, value, "EX", times[0])
+		CheckErr(err)
+	}
 }

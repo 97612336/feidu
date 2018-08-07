@@ -12,8 +12,6 @@ func init(){
 	util.DB=util.Get_sql_db()
 }
 
-
-
 func main(){
 	defer util.DB.Close()
 
