@@ -75,7 +75,7 @@ func Get_img_account() models.Upload_account {
 //获取redis操作对象
 //获取redis操作对象
 //获取redis操作对象
-func Get_redis_obj() models.Redis_conf {
+func Get_redis_conf() models.Redis_conf {
 	//获取reids相关的配置文件
 	home_path := Get_home_path()
 	config_file := home_path + "/conf/redis_conf"
@@ -90,7 +90,7 @@ func Get_redis_obj() models.Redis_conf {
 //设置redis字符串的值
 func Set_redis(key string, value string, times ...string) {
 	//获取配置信息,连接到redis
-	redis_conf := Get_redis_obj()
+	redis_conf := Get_redis_conf()
 	//连接到redis数据库
 	red, err := redis.Dial("tcp", string(redis_conf.Ip_addr)+":"+string(redis_conf.Port))
 	CheckErr(err, "链接redis数据库出错:")
@@ -104,3 +104,18 @@ func Set_redis(key string, value string, times ...string) {
 		CheckErr(err)
 	}
 }
+
+//获取redis的值
+func Get_redis(key string) string {
+	//获取配置信息,连接到redis
+	redis_conf := Get_redis_conf()
+	//连接到redis数据库
+	red, err := redis.Dial("tcp", string(redis_conf.Ip_addr)+":"+string(redis_conf.Port))
+	CheckErr(err, "链接redis数据库出错:")
+	defer red.Close()
+	res, err := redis.String(red.Do("get", key))
+	CheckErr(err)
+	return res
+}
+
+

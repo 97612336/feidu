@@ -12,6 +12,6 @@ func CheckErr(err error, args ...string) {
 		hint = args[0]
 	}
 	if err != nil {
-		log.Fatal(hint, err)
+		log.Println(hint, err)
 	}
 }
