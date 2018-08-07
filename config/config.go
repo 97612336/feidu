@@ -1,6 +1,6 @@
 package config
 
-import "weixin_api/util"
+import "feidu/util"
 
 func Get_path() string {
 	home_path := util.Get_home_path()

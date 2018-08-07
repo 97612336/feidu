@@ -2,9 +2,9 @@ package imgapi
 
 import (
 	"net/http"
-	"weixin_api/util"
+	"feidu/util"
 	"log"
-	"weixin_api/config"
+	"feidu/config"
 	"os"
 	"io"
 )

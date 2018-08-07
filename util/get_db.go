@@ -7,7 +7,7 @@ import (
 	"log"
 	"os/user"
 	"fmt"
-	"weixin_api/models"
+	"feidu/models"
 )
 
 var DB *sql.DB

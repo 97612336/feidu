@@ -3,18 +3,19 @@ package main
 import (
 	"net/http"
 	"log"
-	"weixin_api/handlers"
+	"feidu/handlers"
 	_ "github.com/go-sql-driver/mysql"
+	"feidu/util"
 	)
 
 func init(){
-	//util.DB=util.Get_sql_db()
+	util.DB=util.Get_sql_db()
 }
 
 
 
 func main(){
-	//defer util.DB.Close()
+	defer util.DB.Close()
 
 	var err error
 	//设置路由
