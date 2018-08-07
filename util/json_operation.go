@@ -21,3 +21,9 @@ func Get_json_string(m interface{}) string {
 func Return_json(w http.ResponseWriter, s string) {
 	w.Write([]byte(s))
 }
+
+//直接根据类型对象返回字符串响应
+func Write_json(w http.ResponseWriter, i interface{}) {
+	json_str := Get_json_string(i)
+	w.Write([]byte(json_str))
+}
