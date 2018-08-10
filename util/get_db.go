@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"feidu/models"
 	"github.com/garyburd/redigo/redis"
+	_"github.com/go-sql-driver/mysql"
 )
 
 var DB *sql.DB
