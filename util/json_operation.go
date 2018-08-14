@@ -19,6 +19,7 @@ func Get_json_string(m interface{}) string {
 
 //在web中返回json字符串
 func Return_json(w http.ResponseWriter, s string) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Write([]byte(s))
 }
 
