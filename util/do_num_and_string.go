@@ -3,6 +3,9 @@ package util
 import (
 	"time"
 	"math/rand"
+	"crypto/md5"
+	"io"
+	"encoding/hex"
 )
 
 //获取一组随机数
@@ -22,4 +25,11 @@ func Get_random_arr(count int, max_num int) []int {
 		nums_arr = append(nums_arr, one_rand_num)
 	}
 	return nums_arr
+}
+
+//得到md5字符串
+func Get_md5str(str string) string {
+	h := md5.New()
+	io.WriteString(h, str)
+	return hex.EncodeToString(h.Sum(nil))
 }
