@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"html/template"
 )
 
 //将类型转化为字符串json
@@ -31,4 +32,11 @@ func Return_jsonp(w http.ResponseWriter, i interface{}) {
 	w.Header().Set("content-type", "application/json")             //返回数据格式是json
 	json_str := Get_json_string(i)
 	w.Write([]byte(json_str))
+}
+
+//渲染模板的封装
+func Render_template(w http.ResponseWriter, html_path string, data interface{}) {
+	tmpl, _ := template.ParseFiles(html_path)
+	tmpl.Execute(w, data)
+	return
 }
