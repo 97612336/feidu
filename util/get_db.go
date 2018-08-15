@@ -41,7 +41,6 @@ func Get_sql_db() *sql.DB {
 	}
 	db.SetMaxOpenConns(100)
 	db.SetMaxIdleConns(50)
-	db.Ping()
 	return db
 }
 
