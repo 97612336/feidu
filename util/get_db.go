@@ -35,7 +35,7 @@ func Get_sql_db() *sql.DB {
 	//打开数据库
 	db, err := sql.Open("mysql",
 		sqlconf.SqlUser + ":" + sqlconf.SqlPassword+
-			"@tcp("+ sqlconf.SqlHost+ ":"+ sqlconf.SqlPort+ ")/cyx?charset=utf8")
+			"@tcp("+ sqlconf.SqlHost+ ":"+ sqlconf.SqlPort+ ")/novel?charset=utf8")
 	if err != nil {
 		log.Println("打开数据库出错")
 	}
