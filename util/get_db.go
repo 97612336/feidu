@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"feidu/models"
 	"github.com/garyburd/redigo/redis"
-	_"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var DB *sql.DB
@@ -39,6 +39,9 @@ func Get_sql_db() *sql.DB {
 	if err != nil {
 		log.Println("打开数据库出错")
 	}
+	db.SetMaxOpenConns(100)
+	db.SetMaxIdleConns(50)
+	db.Ping()
 	return db
 }
 
@@ -118,5 +121,3 @@ func Get_redis(key string) string {
 	CheckErr(err)
 	return res
 }
-
-
