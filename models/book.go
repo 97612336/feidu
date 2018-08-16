@@ -20,3 +20,7 @@ type Chapter struct {
 	Create_time  string `json:"create_time"`
 }
 
+type Chapter_id_name struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}

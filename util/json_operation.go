@@ -18,6 +18,11 @@ func Get_json_string(m interface{}) string {
 	return res_str
 }
 
+//将字符串json转化为类型
+func Json_to_object(json_str string, i interface{}){
+	json.Unmarshal([]byte(json_str), i)
+}
+
 //在web中返回json字符串
 func Return_json(w http.ResponseWriter, i interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
