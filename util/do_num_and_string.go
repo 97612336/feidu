@@ -27,6 +27,7 @@ func Get_random_arr(count int, max_num int) []int {
 	return nums_arr
 }
 
+
 //得到md5字符串
 func Get_md5str(str string) string {
 	h := md5.New()
