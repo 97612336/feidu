@@ -88,12 +88,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		//首先获取banner
 		banners := Get_banner()
 		//其次获取阅读历史
-		historys := Get_history(user_id)
+		if user_id != "" {
+			historys := Get_history(user_id)
+			data["history"] = historys
+		} else {
+			data["history"] = nil
+		}
+
 		//获取热门
 		hot_novels := Get_hot()
 		data["banner"] = banners
-		data["history"] = historys
 		data["hot"] = hot_novels
+		data["code"] = 200
 		util.Return_jsonp(w, data)
 	}
 }
