@@ -120,3 +120,14 @@ func Get_redis(key string) string {
 	CheckErr(err)
 	return res
 }
+
+//banner_novel的配置
+func Get_banner_novel_id() []int {
+	home_path := Get_home_path()
+	config_path := home_path + "/conf/banner_novel"
+	data, err := ioutil.ReadFile(config_path)
+	CheckErr(err)
+	var banner_id_list []int
+	json.Unmarshal(data, &banner_id_list)
+	return banner_id_list
+}

@@ -14,11 +14,8 @@ type Upload_account struct {
 	Upload_password string
 }
 
-
 //redis账号类型
 type Redis_conf struct {
 	Ip_addr string
-	Port string
+	Port    string
 }
-
-

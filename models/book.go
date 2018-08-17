@@ -24,3 +24,26 @@ type Chapter_id_name struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
 }
+
+//banner模型
+type Banner_novel struct {
+	Book_id int    `json:"book_id"`
+	Name    string `json:"name"`
+	Author  string `json:"author"`
+}
+
+//histroy模型
+type View_history struct {
+	Book_id    int    `json:"book_id"`
+	Chapter_id int    `json:"chapter_id"`
+	Name       string `json:"name"`
+	Image      string `json:"image"`
+}
+
+//hot_novel模型
+type Hot_novel struct {
+	Book_id int    `json:"book_id"`
+	Image   string `json:"images"`
+	Name    string `json:"name"`
+	Desc    string `json:"desc"`
+}
