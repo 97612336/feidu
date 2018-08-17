@@ -5,6 +5,7 @@ import (
 	"feidu/util"
 	"feidu/models"
 	"strconv"
+	"fmt"
 )
 
 func Get_some_book_name(w http.ResponseWriter, r *http.Request) {
@@ -190,4 +191,21 @@ func Get_desc_by_book_id(one_hot_novel *models.Hot_novel) {
 		}
 	}
 	one_hot_novel.Desc = desc
+}
+
+//保存用户阅读历史
+func Save_vie_history(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(1024 * 1024 * 3)
+	if r.Method == "GET" {
+		var data = make(map[string]interface{})
+		user_id := util.Get_argument(r, "user_id")
+		book_id := util.Get_argument(r, "book_id")
+		chapter_id := util.Get_argument(r, "chapter_id")
+
+		fmt.Println(user_id)
+		fmt.Println(book_id)
+		fmt.Println(chapter_id)
+
+		util.Return_jsonp(w, data)
+	}
 }
