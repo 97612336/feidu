@@ -24,7 +24,7 @@ func Get_some_book_name(w http.ResponseWriter, r *http.Request) {
 		}
 		data["books"] = books
 		data["code"] = 200
-		util.Return_json(w, data)
+		util.Return_jsonp(w, data)
 	}
 }
 
@@ -52,7 +52,7 @@ func Get_chapter_name_by_book_id(w http.ResponseWriter, r *http.Request) {
 		}
 		data["names"] = id_names
 		data["code"] = 200
-		util.Return_json(w, data)
+		util.Return_jsonp(w, data)
 	} else if r.Method == "POST" {
 
 	}
@@ -75,6 +75,6 @@ func Get_one_chapter_by_id(w http.ResponseWriter, r *http.Request) {
 		util.Json_to_object(one_text, &res_text)
 		data["code"] = 200
 		data["text"] = res_text
-		util.Return_json(w, data)
+		util.Return_jsonp(w, data)
 	}
 }
