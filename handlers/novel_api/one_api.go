@@ -15,6 +15,7 @@ func Get_some_book_name(w http.ResponseWriter, r *http.Request) {
 		var books []models.Book
 		sql_str := "select * from book where has_chapter=1 order by rand() limit 10;"
 		rows, err := util.DB.Query(sql_str)
+		defer rows.Close()
 		util.CheckErr(err)
 		for rows.Next() {
 			var one_book models.Book
@@ -44,6 +45,7 @@ func Get_chapter_name_by_book_id(w http.ResponseWriter, r *http.Request) {
 		sql_str := "select id,name from chapter where book_id =" + book_id + " limit " + strconv.Itoa((page-1)*page_size) +
 			"," + strconv.Itoa(page_size) + ";"
 		rows, err := util.DB.Query(sql_str)
+		defer rows.Close()
 		util.CheckErr(err)
 		for rows.Next() {
 			var one models.Chapter_id_name
@@ -66,6 +68,7 @@ func Get_one_chapter_by_id(w http.ResponseWriter, r *http.Request) {
 		chapter_id := r.FormValue("chapter_id")
 		sql_str := "select chapter_text from chapter where id =" + chapter_id + ";"
 		rows, err := util.DB.Query(sql_str)
+		defer rows.Close()
 		util.CheckErr(err)
 		var one_text string
 		for rows.Next() {
@@ -106,6 +109,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func Get_user_id_by_open_id(open_id string) int64 {
 	select_sql_str := "select id from user where uuid=\"" + open_id + "\";"
 	rows, err := util.DB.Query(select_sql_str)
+	defer rows.Close()
 	util.CheckErr(err)
 	var user_id int64
 	for rows.Next() {
@@ -140,6 +144,7 @@ func Get_banner() []models.Banner_novel {
 func Get_banner_by_id(novel_id int) models.Banner_novel {
 	sql_str := "select id,name,author from book where id=" + strconv.Itoa(novel_id) + ";"
 	rows, err := util.DB.Query(sql_str)
+	defer rows.Close()
 	util.CheckErr(err)
 	var one_banner models.Banner_novel
 	for rows.Next() {
@@ -153,6 +158,7 @@ func Get_history(user_id string) []models.View_history {
 	//根据user_id查询view_history表,倒序排序,取前三个
 	history_sql := "select book_id,chapter_id from view_history where user_id=" + user_id + " order by id desc limit 3;"
 	rows, err := util.DB.Query(history_sql)
+	defer rows.Close()
 	var historys []models.View_history
 	util.CheckErr(err)
 	for rows.Next() {
@@ -168,6 +174,7 @@ func Get_book_img_name_by_id(one_history *models.View_history) {
 	book_id := one_history.Book_id
 	sql_str := "select name,book_img from book where id=" + strconv.Itoa(book_id) + ";"
 	rows, err := util.DB.Query(sql_str)
+	defer rows.Close()
 	util.CheckErr(err)
 	for rows.Next() {
 		err := rows.Scan(&one_history.Name, &one_history.Image)
@@ -180,6 +187,7 @@ func Get_hot() []models.Hot_novel {
 	var hot_novels []models.Hot_novel
 	sql_str := "select id,book_img,name from book where has_chapter=1 order by rand() limit 10;"
 	rows, err := util.DB.Query(sql_str)
+	defer rows.Close()
 	util.CheckErr(err)
 	for rows.Next() {
 		var one_hot_novel models.Hot_novel
@@ -195,6 +203,7 @@ func Get_desc_by_book_id(one_hot_novel *models.Hot_novel) {
 	book_id := one_hot_novel.Book_id
 	sql_str := "select chapter_text from chapter where book_id=" + strconv.Itoa(book_id) + " limit 1;"
 	rows, err := util.DB.Query(sql_str)
+	defer rows.Close()
 	util.CheckErr(err)
 	var text string
 	for rows.Next() {
