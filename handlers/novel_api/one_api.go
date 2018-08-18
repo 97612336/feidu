@@ -84,24 +84,45 @@ func Get_one_chapter_by_id(w http.ResponseWriter, r *http.Request) {
 func Index(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(1024 * 1024 * 3)
 	if r.Method == "GET" {
-		user_id := r.FormValue("user_id")
+		open_id := util.Get_argument(r, "open_id")
+		user_id := Get_user_id_by_open_id(open_id)
 		var data = make(map[string]interface{})
 		//首先获取banner
 		banners := Get_banner()
 		//其次获取阅读历史
-		if user_id != "" {
-			historys := Get_history(user_id)
-			data["history"] = historys
-		} else {
-			data["history"] = nil
-		}
-
+		historys := Get_history(strconv.FormatInt(user_id, 10))
+		data["history"] = historys
 		//获取热门
 		hot_novels := Get_hot()
 		data["banner"] = banners
 		data["hot"] = hot_novels
 		data["code"] = 200
+		data["user_id"] = user_id
 		util.Return_jsonp(w, data)
+	}
+}
+
+//根据open_id获取user_id，如果open_id存在，则获取user_id,否则执行存入操作
+func Get_user_id_by_open_id(open_id string) int64 {
+	select_sql_str := "select id from user where uuid=\"" + open_id + "\";"
+	rows, err := util.DB.Query(select_sql_str)
+	util.CheckErr(err)
+	var user_id int64
+	for rows.Next() {
+		rows.Scan(&user_id)
+	}
+	if user_id == 0 {
+		//执行存入数据库的操作
+		insert_sql_str := "insert into user (uuid) values(?);"
+		stm, err := util.DB.Prepare(insert_sql_str)
+		util.CheckErr(err)
+		res, err := stm.Exec(open_id)
+		util.CheckErr(err)
+		user_id, err := res.LastInsertId()
+		util.CheckErr(err)
+		return user_id
+	} else {
+		return user_id
 	}
 }
 
@@ -201,7 +222,7 @@ func Save_vie_history(w http.ResponseWriter, r *http.Request) {
 		user_id := util.Get_argument(r, "user_id")
 		book_id := util.Get_argument(r, "book_id")
 		chapter_id := util.Get_argument(r, "chapter_id")
-		
+
 		fmt.Println(user_id)
 		fmt.Println(book_id)
 		fmt.Println(chapter_id)
