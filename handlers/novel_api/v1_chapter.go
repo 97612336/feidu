@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"feidu/util"
 	"feidu/models"
-		)
+	"strings"
+	)
 
 func Get_one_chapter_by_book_id(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(1024 * 1024 * 3)
@@ -48,7 +49,8 @@ func Read_book(book_id string, user_id string) models.One_chapter {
 			util.CheckErr(err)
 			var text_list []string
 			util.Json_to_object(text, &text_list)
-			one_chapter.ChapterContent = text_list
+			new_text := Trim_text(text_list)
+			one_chapter.ChapterContent = new_text
 		}
 		return one_chapter
 	} else {
@@ -63,10 +65,23 @@ func Read_book(book_id string, user_id string) models.One_chapter {
 			util.CheckErr(err)
 			var text_list []string
 			util.Json_to_object(text, &text_list)
-			one_chapter.ChapterContent = text_list
+			new_text := Trim_text(text_list)
+			one_chapter.ChapterContent = new_text
 		}
 		return one_chapter
 	}
+}
+
+//过滤文章列表
+func Trim_text(text_list []string) []string {
+	var text_string []string
+	for _, one_text := range text_list {
+		if len(one_text) > 3 {
+			new_one_text := strings.Trim(one_text, "<b></b>")
+			text_string = append(text_string, new_one_text)
+		}
+	}
+	return text_string
 }
 
 func Get_book_name(book_id string) string {
