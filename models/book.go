@@ -47,3 +47,24 @@ type Hot_novel struct {
 	Name    string `json:"name"`
 	Desc    string `json:"desc"`
 }
+
+//种类模型
+type Category struct {
+	CategoryId    int    `json:"categoryId"`
+	CategoryName  string `json:"categoryName"`
+	CategoryImage string `json:"categoryImage"`
+}
+
+//类别种类类型
+type Category_book struct {
+	BookId int    `json:"bookId"`
+	Image  string `json:"image"`
+	Name   string `json:"name"`
+	Desc   string `json:"desc"`
+}
+
+type One_chapter struct {
+	ChapterId int `json:"chapterId"`
+	ChapterName string `json:"chapterName"`
+	ChapterContent []string `json:"chapterContent"`
+}
