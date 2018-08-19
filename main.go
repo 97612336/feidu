@@ -12,7 +12,6 @@ func init() {
 }
 
 func main() {
-	defer util.DB.Close()
 	//设置路由
 	handlers.MyUrls()
 	//设置监听端口

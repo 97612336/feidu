@@ -10,6 +10,7 @@ import (
 	"feidu/models"
 	"github.com/garyburd/redigo/redis"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 var DB *sql.DB
@@ -34,13 +35,17 @@ func Get_sql_db() *sql.DB {
 	sqlconf := Get_conf_info()
 	//打开数据库
 	db, err := sql.Open("mysql",
-		sqlconf.SqlUser + ":" + sqlconf.SqlPassword+
-			"@tcp("+ sqlconf.SqlHost+ ":"+ sqlconf.SqlPort+ ")/novel?charset=utf8")
+		sqlconf.SqlUser+":"+sqlconf.SqlPassword+
+			"@tcp("+sqlconf.SqlHost+":"+sqlconf.SqlPort+")/novel?charset=utf8")
 	if err != nil {
 		log.Println("打开数据库出错")
 	}
+	//设置最大连接数
 	db.SetMaxOpenConns(100)
+	//设置连接池最大数
 	db.SetMaxIdleConns(50)
+	//设置每个链接的存活的时长
+	db.SetConnMaxLifetime(time.Second * 50)
 	return db
 }
 

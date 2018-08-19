@@ -11,4 +11,5 @@ func MyUrls() {
 	http.HandleFunc("/v1/get_text", novel_api.Get_one_chapter_by_id)
 	http.HandleFunc("/v1/index", novel_api.Index)
 	http.HandleFunc("/v1/save_view_history", novel_api.Save_vie_history)
+	http.HandleFunc("/v1/category", novel_api.Show_all_categories)
 }
