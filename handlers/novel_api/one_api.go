@@ -224,7 +224,7 @@ func Get_desc_by_book_id(one_hot_novel *models.Hot_novel) {
 }
 
 //保存用户阅读历史
-func Save_vie_history(w http.ResponseWriter, r *http.Request) {
+func Save_view_history(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(1024 * 1024 * 3)
 	if r.Method == "GET" {
 		var data = make(map[string]interface{})
