@@ -5,8 +5,46 @@ import (
 	"feidu/util"
 	"feidu/models"
 	"strings"
-	)
+)
 
+// 翻页接口
+func Go_to_another_page(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(1024 * 1024 * 3)
+	if r.Method == "GET" {
+		var data = make(map[string]interface{})
+		book_id := util.Get_argument(r, "book_id")
+		do_kind := util.Get_argument(r, "do_kind")
+		per_chapter_id := util.Get_argument(r, "chapter_id")
+		//当do_kind=1的时候是下一页，等于０的时候是上一页
+		sql_str := ""
+		if do_kind == "1" {
+			sql_str = "select id,name,chapter_text from chapter where book_id=? and id>? limit 1;"
+		} else if do_kind == "0" {
+			sql_str = "select id,name,chapter_text from chapter where book_id=? and id<?  ORDER by id DESC LIMIT 1;"
+		}
+		rows, err := util.DB.Query(sql_str, book_id, per_chapter_id)
+		util.CheckErr(err)
+		defer rows.Close()
+		var one_chapter models.One_chapter
+		var text string
+		for rows.Next() {
+			err := rows.Scan(&one_chapter.ChapterId, &one_chapter.ChapterName, &text)
+			util.CheckErr(err)
+			var text_list []string
+			util.Json_to_object(text, &text_list)
+			new_text := Trim_text(text_list)
+			one_chapter.ChapterContent = new_text
+		}
+		book_name := Get_book_name(book_id)
+		data["code"] = 200
+		data["book_id"] = book_id
+		data["book_name"] = book_name
+		data["chapter"] = one_chapter
+		util.Return_json(w, data)
+	}
+}
+
+// 点击进入书本详情
 func Get_one_chapter_by_book_id(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(1024 * 1024 * 3)
 	if r.Method == "GET" {

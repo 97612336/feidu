@@ -19,4 +19,6 @@ func MyUrls() {
 	http.HandleFunc("/v1/category_book", novel_api.Show_category_book)
 	//点击书本进入
 	http.HandleFunc("/v1/book_read", novel_api.Get_one_chapter_by_book_id)
+	// 点击翻页的接口
+	http.HandleFunc("/v1/book/for_another_page", novel_api.Go_to_another_page)
 }
