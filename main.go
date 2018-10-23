@@ -1,12 +1,12 @@
 package main
 
 import (
+	"net/http"
 	"feidu/handlers"
+	_ "github.com/go-sql-driver/mysql"
 	"feidu/util"
 	"flag"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	"net/http"
 )
 
 func init() {
