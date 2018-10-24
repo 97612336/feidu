@@ -2,14 +2,14 @@ package util
 
 import (
 	"database/sql"
-	"io/ioutil"
 	"encoding/json"
-	"log"
-	"os/user"
-	"fmt"
 	"feidu/models"
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	_ "github.com/go-sql-driver/mysql"
+	"io/ioutil"
+	"log"
+	"os/user"
 	"time"
 )
 

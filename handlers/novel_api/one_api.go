@@ -1,11 +1,10 @@
 package novel_api
 
 import (
-	"net/http"
-	"feidu/util"
 	"feidu/models"
+	"feidu/util"
+	"net/http"
 	"strconv"
-	"fmt"
 )
 
 func Get_some_book_name(w http.ResponseWriter, r *http.Request) {
@@ -142,13 +141,13 @@ func Get_banner() []models.Banner_novel {
 }
 
 func Get_banner_by_id(novel_id int) models.Banner_novel {
-	sql_str := "select id,name,author from book where id=" + strconv.Itoa(novel_id) + ";"
+	sql_str := "select id,name,book_img,author from book where id=" + strconv.Itoa(novel_id) + ";"
 	rows, err := util.DB.Query(sql_str)
 	defer rows.Close()
 	util.CheckErr(err)
 	var one_banner models.Banner_novel
 	for rows.Next() {
-		rows.Scan(&one_banner.Book_id, &one_banner.Name, &one_banner.Author)
+		rows.Scan(&one_banner.Book_id, &one_banner.Name, &one_banner.Img, &one_banner.Author)
 	}
 	return one_banner
 }
@@ -232,10 +231,17 @@ func Save_view_history(w http.ResponseWriter, r *http.Request) {
 		book_id := util.Get_argument(r, "book_id")
 		chapter_id := util.Get_argument(r, "chapter_id")
 
-		fmt.Println(user_id)
-		fmt.Println(book_id)
-		fmt.Println(chapter_id)
 
+		//执行存入数据库的操作
+		insert_sql_str := "insert into view_history (user_id,book_id,chapter_id) values(?,?,?);"
+		stm, err := util.DB.Prepare(insert_sql_str)
+		util.CheckErr(err)
+		res, err := stm.Exec(user_id, book_id, chapter_id)
+		util.CheckErr(err)
+		id, err := res.LastInsertId()
+		util.CheckErr(err)
+		data["code"] = 200
+		data["view_id"] = id
 		util.Return_jsonp(w, data)
 	}
 }

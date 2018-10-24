@@ -30,6 +30,7 @@ type Banner_novel struct {
 	Book_id int    `json:"book_id"`
 	Name    string `json:"name"`
 	Author  string `json:"author"`
+	Img 	string `json:"img"`
 }
 
 //histroy模型
